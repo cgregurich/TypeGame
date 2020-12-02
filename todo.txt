@@ -1,0 +1,53 @@
+WHERE I LEFT OFF:
+got the grey highlighting to work, at least for the first line. Once it hits line end, it needs to 
+clear the first line, shift the second line up, and generate a new line at the bottom (remember potentially this wouldn't necessarily be the second line, as there could be more??)
+
+Current goal: match the text display with 10fast fingers.
+i.e. display the chunk of text, or at least as much as will fit on two lines
+the current word is highlighted with grey background
+when a line is finished, the finished line disappears and the bottom line moves up, potentially revealing another line below it
+
+
+WHERE I LEFT OFF:
+trying to make the whole "space clears the entry" thing functional. If you look at 10fastfingers,
+if I were to type the word (wrong or right, doesn't matter), then hold space (not long enough for multiple keys to register) and hit a letter, then let go of space, the letter I pressed will "stay". Currently my typegame deletes everything including the new letter (if it clears entry on space release) or works nicely, but puts a space as the first letter (i.e. still sends the space on the key release since the delete is triggered on the press in this case)
+
+shoot man do I think I might have figured it oiut
+
+
+
+RANDOM WORDS vs BLOCKS OF TEXT
+aka 10fastfingers vs typeracer
+in randomwords, when space is pressed in an empty entry, it's reset. when space is pressed after some letters, the typed word is registered; if it's wrong, it stays wrong. If it's right, then great. Either way a space after letters moves to the next word
+
+in blocksoftext, when space is pressed in an empty entry, nothing happens; no space is inserted. when space is entered after some text, if the space is the correct key, then we keep moving on. If not, then you have to go back to the last correct letter and continue on from there.
+
+I say we implement randomwords aka 10fastfingers first, then do blocksoftext aka typeracer after.
+
+So current implementation mechanics: 
+Space entered in empty entry -> clear entry
+Space entered at end of correct word -> move on; clear entry, go to next word
+Space entered at end of incorrect word -> move on; clear entry, go to next word
+Correct char entered -> counts as correct, green text, w/e
+Incorrect char entered -> counts as incorrect, red text, w/e
+
+
+BUG - when typing word correctly and hitting space, sometimes word flickers from green to red before it disappears
+
+- Make sure it's case sensitive
+
+figure out how to properly see if typed word is correct so far i.e. instead of checking if typed_word is in goal_word, check if typed_word so far is part of goal_word, starting at index 0 of goal_word
+
+- display more than one word
+
+- add settings to game
+
+- typing speed calculation
+
+- save results i.e. save player's scores, high scores, averages
+
+- allow adding own words; modifying word choice
+
+- change game mode i.e. random words vs sentences (somehow automate grabbing chunks of text from online; goodreads quotes?)
+
+- make ctrl + backspace work
