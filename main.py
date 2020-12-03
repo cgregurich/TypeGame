@@ -5,11 +5,13 @@ from timer import Timer
 import PIL
 from PIL import Image, ImageTk
 
-# Where I left off: just got the color coding for the correct | incorrect words to work
-# Next: do the same for keystrokes/chars
-# then fix the below bug
+# Where i left off: trying to get ctrl + backspace to work
+# My idea, at least to start and test: in process_key_event, if event is ctrl down, set a 
+# bool ctrl_down to True. if event is backspace down, clear previous word instead of previous char
+#TODO then fix the below bug
+# maybe add settings menu next? Change time in-app, change word file, etc?
 
-# Current todo: display WPM and accuracy somewhere
+
 # BUG TO FIX: reset button doesn't affect timer if it's currently running
 
 FONT = ("Consolas", 16)
@@ -20,7 +22,7 @@ class TypeGame(Tk):
 		Tk.__init__(self)
 		self.geometry("675x200")
 
-		self.TIME = 10
+		self.TIME = 60
 
 		# Display settings
 		self.MAX_CHARS = 50 # number of characters allowed per line
@@ -48,8 +50,8 @@ class TypeGame(Tk):
 
 		self.tags = []
 
-		self.correct_chars = 0
 		self.attempted_chars = 0
+		self.correct_chars = 0
 		self.attempted_words = 0
 		self.correct_words = 0
 
@@ -115,31 +117,46 @@ class TypeGame(Tk):
 		wpm = self.calc_wpm()
 		accuracy = self.calc_accuracy()
 		wrong_words = self.attempted_words - self.correct_words
+		wrong_chars = self.attempted_chars - self.correct_chars
 		self.results_text.config(state=NORMAL)
 		self.results_text.delete("0.0", END)
+
+		# WPM and ACCURACY
 		self.results_text.insert(INSERT, f"{wpm} WPM")
 		self.results_text.tag_add("wpm", "1.0", INSERT)
-		self.results_text.tag_config("wpm", foreground="green")
-
+		
 		self.results_text.insert(INSERT, f"   {accuracy}% accuracy\n")
 
+		# WORDS
 		self.results_text.insert(INSERT, "Words: ")
-		
 		start = self.results_text.index(INSERT)
 		self.results_text.insert(start, f"{self.correct_words}")
 		end = self.results_text.index(INSERT)
 		self.results_text.tag_add("cw", start, end)
-
 		self.results_text.insert(INSERT, f"|")
-
 		start = self.results_text.index(INSERT)
 		self.results_text.insert(start, f"{wrong_words}")
 		end = self.results_text.index(INSERT)
 		self.results_text.tag_add("ww", start, end)
 
+		# KEYSTROKES
+		self.results_text.insert(INSERT, "\n")
+		self.results_text.insert(INSERT, "Keystrokes: ")
+		start = self.results_text.index(INSERT)
+		self.results_text.insert(INSERT, f"{self.correct_chars}")
+		end = self.results_text.index(INSERT)
+		self.results_text.tag_add("cks", start, end)
+		self.results_text.insert(INSERT, "|")
+		start = self.results_text.index(INSERT)
+		self.results_text.insert(start, f"{wrong_chars}")
+		end = self.results_text.index(INSERT)
+		self.results_text.tag_add("wks", start, end)
+
 		self.results_text.tag_config("cw", foreground="green")
 		self.results_text.tag_config("ww", foreground="red")
-
+		self.results_text.tag_config("wpm", foreground="green")
+		self.results_text.tag_config("cks", foreground="green")
+		self.results_text.tag_config("wks", foreground="red")
 
 
 		self.results_text.config(state=DISABLED)
@@ -172,7 +189,7 @@ class TypeGame(Tk):
 	def reset_word_data(self):
 		self.attempted_chars = 0
 		self.correct_chars = 0
-		self.attemped_words = 0
+		self.attempted_words = 0
 		self.correct_words = 0
 
 
@@ -192,12 +209,8 @@ class TypeGame(Tk):
 		self.results_text.config(stat=DISABLED)
 
 
-
-
 	def start_timer(self):
 		self.timer_loop(self.TIME)
-
-
 
 	def timer_loop(self, seconds):
 		"""seconds is the grand total number of seconds left in the timer"""
@@ -365,11 +378,13 @@ class TypeGame(Tk):
 
 	def process_key_event(self, event):
 		# types: 2 = press, 3 = release
+		print(event)
 		if self.is_running == False:
 			self.is_running = True
 			self.start_timer()
 		if event.char == " ":
 			self.process_space(event)
+		if event.
 
 	def process_space(self, event):
 		"""If space is pressed, then clear the entry.

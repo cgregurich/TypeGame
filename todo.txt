@@ -1,18 +1,6 @@
 WHERE I LEFT OFF:
-got the grey highlighting to work, at least for the first line. Once it hits line end, it needs to 
-clear the first line, shift the second line up, and generate a new line at the bottom (remember potentially this wouldn't necessarily be the second line, as there could be more??)
 
 Current goal: match the text display with 10fast fingers.
-i.e. display the chunk of text, or at least as much as will fit on two lines
-the current word is highlighted with grey background
-when a line is finished, the finished line disappears and the bottom line moves up, potentially revealing another line below it
-
-
-WHERE I LEFT OFF:
-trying to make the whole "space clears the entry" thing functional. If you look at 10fastfingers,
-if I were to type the word (wrong or right, doesn't matter), then hold space (not long enough for multiple keys to register) and hit a letter, then let go of space, the letter I pressed will "stay". Currently my typegame deletes everything including the new letter (if it clears entry on space release) or works nicely, but puts a space as the first letter (i.e. still sends the space on the key release since the delete is triggered on the press in this case)
-
-shoot man do I think I might have figured it oiut
 
 
 
