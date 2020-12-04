@@ -1,9 +1,10 @@
 from tkinter import *
 import random
 from colors import *
-from timer import Timer
+
 import PIL
 from PIL import Image, ImageTk
+from configmanager import ConfigManager
 
 
 # TODO:
@@ -17,11 +18,13 @@ class TypeGame(Frame):
 		Frame.__init__(self, parent)
 		self.controller = controller
 
-		self.TIME = 60
+		self.cfgmgr = ConfigManager()
+		self.TIME = int(self.cfgmgr.get_setting("SETTINGS", "time"))
 
 		# Display settings
-		self.MAX_CHARS = 50 # number of characters allowed per line
-		self.LINE_COUNT = 2 # number of lines that will display
+		self.LINE_COUNT = int(self.cfgmgr.get_setting("SETTINGS", "linecount"))
+		self.MAX_CHARS = int(self.cfgmgr.get_setting("SETTINGS", "maxcharsperline"))
+		
 
 		self.timer_status = BooleanVar()
 		
@@ -194,6 +197,7 @@ class TypeGame(Frame):
 		self.timer_lbl.config(text="{}:{:02}".format(m, s))
 
 	def reset(self):
+		self.reload_settings()
 		self.init_words()
 		self.draw_words()
 		self.reset_goal_word()
@@ -208,6 +212,15 @@ class TypeGame(Frame):
 		self.reset_timer_label()
 		self.reset_results_text()
 		self.reset_timer()
+
+		
+
+	def reload_settings(self):
+		self.TIME = int(self.cfgmgr.get_setting("SETTINGS", "time"))
+		self.LINE_COUNT = int(self.cfgmgr.get_setting("SETTINGS", "linecount"))
+		self.MAX_CHARS = int(self.cfgmgr.get_setting("SETTINGS", "maxcharsperline"))
+	
+
 
 	def reset_timer(self):
 		if not self.timer_id:
