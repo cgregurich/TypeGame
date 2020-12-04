@@ -1,3 +1,6 @@
 ﻿__pycache__/
 testing.py
 testing.ini
+build/
+dist/
+*.spec

@@ -23,13 +23,13 @@ class Settings(Frame):
 		Button(self, text="Back", command=self.back_clicked).grid(row=0, column=0) #chage this to an arrow or something probably
 		Label(self, text="Settings Page").grid(row=0, column=1)
 
-		self.cfg_p = configparse.ConfigParser()
-		self.init_config()
+		# self.cfg_p = configparser.ConfigParser()
+		# self.init_config()
 
-	def 
+	# def 
 
 
-	def draw_settings(self):
+	# def draw_settings(self):
 
 
 	def back_clicked(self):

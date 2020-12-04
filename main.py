@@ -1,6 +1,6 @@
 from tkinter import *
-from typegame import *
-from settings import *
+from typegame import TypeGame
+from settings import Settings
 
 
 class MainApp(Tk):

@@ -121,12 +121,12 @@ class TypeGame(Frame):
 
 	def apply_button_images(self):
 		IMG_SIZE = 30
-		img = Image.open("restart.png")
+		img = Image.open("resources/restart.png")
 		img = img.resize((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
 		self.img_restart = ImageTk.PhotoImage(img)
 		self.reset_btn.config(image=self.img_restart)
 
-		img = Image.open("settings.png")
+		img = Image.open("resources/settings.png")
 		img = img.resize((IMG_SIZE, IMG_SIZE), Image.ANTIALIAS)
 		self.img_settings = ImageTk.PhotoImage(img)
 		self.settings_btn.config(image=self.img_settings)
@@ -282,7 +282,7 @@ class TypeGame(Frame):
 			self.words[line] = self.generate_words_list()
 
 	def get_all_words(self):
-		with open("words.txt", "r") as file:
+		with open("resources/words.txt", "r") as file:
 			words = file.read().split("|")
 		return words
 
