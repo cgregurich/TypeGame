@@ -4,3 +4,4 @@ testing.ini
 build/
 dist/
 *.spec
+config.ini
