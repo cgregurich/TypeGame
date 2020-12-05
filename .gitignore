@@ -5,3 +5,5 @@ build/
 dist/
 *.spec
 config.ini
+resources/words.txt
+second.txt
