@@ -1,7 +1,12 @@
 WHERE I LEFT OFF:
 
-Current goal: match the text display with 10fast fingers.
+CURRENT TODO:
+make all of the settings options actually apply.
+- when line count/max chars per line changes, resize the window/text
+widget accordingly
 
+
+** Have it generate the words file so I can tweak mine with no issue
 
 
 RANDOM WORDS vs BLOCKS OF TEXT
