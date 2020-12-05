@@ -295,8 +295,9 @@ class TypeGame(Frame):
 			self.words[line] = self.generate_words_list()
 
 	def get_all_words(self):
-		with open("resources/words.txt", "r") as file:
+		with open(f"resources/words.txt", "r") as file:
 			words = file.read().split("|")
+		print(words)
 		return words
 
 	def random_word(self):
