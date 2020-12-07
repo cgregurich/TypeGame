@@ -1,12 +1,11 @@
-WHERE I LEFT OFF:
+CURRENT:
+- add logs feature
+- save each run (all data??)
+- be able to view log
+- afk checker?
+- last 24 average, last 7 days average, last 30 day average?
 
-CURRENT TODO:
-make all of the settings options actually apply.
-- when line count/max chars per line changes, resize the window/text
-widget accordingly
 
-
-** Have it generate the words file so I can tweak mine with no issue
 
 
 RANDOM WORDS vs BLOCKS OF TEXT

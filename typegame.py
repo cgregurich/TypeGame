@@ -22,8 +22,8 @@ class TypeGame(Frame):
 		self.TIME = int(self.cfgmgr.get_setting("SETTINGS", "time"))
 
 		# Display settings
-		self.LINE_COUNT = int(self.cfgmgr.get_setting("SETTINGS", "linecount"))
-		self.MAX_CHARS = int(self.cfgmgr.get_setting("SETTINGS", "maxcharsperline"))
+		self.LINE_COUNT = 2
+		self.MAX_CHARS = 50
 		
 
 		self.timer_status = BooleanVar()
@@ -217,8 +217,6 @@ class TypeGame(Frame):
 
 	def reload_settings(self):
 		self.TIME = int(self.cfgmgr.get_setting("SETTINGS", "time"))
-		self.LINE_COUNT = int(self.cfgmgr.get_setting("SETTINGS", "linecount"))
-		self.MAX_CHARS = int(self.cfgmgr.get_setting("SETTINGS", "maxcharsperline"))
 	
 
 
@@ -297,7 +295,6 @@ class TypeGame(Frame):
 	def get_all_words(self):
 		with open(f"resources/words.txt", "r") as file:
 			words = file.read().split("|")
-		print(words)
 		return words
 
 	def random_word(self):

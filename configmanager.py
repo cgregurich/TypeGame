@@ -13,8 +13,7 @@ class ConfigManager(configparser.ConfigParser):
 		
 
 	def create_config_file(self):
-		self["SETTINGS"] = {"Time": "60", "WordsFile": "words.txt", 
-						  "LineCount": "2", "MaxCharsPerLine": "50"}
+		self["SETTINGS"] = {"Time": "60", "WordsFile": "words.txt"}
 		with open(self.FILE_NAME, "w") as file:
 			self.write(file)
 

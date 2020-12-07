@@ -35,6 +35,7 @@ class Settings(Frame):
 		self.options_frame = Frame(self)
 		self.options_frame.grid(row=1, column=1)
 
+
 		self.entries = {}
 
 		self.cfgmgr = ConfigManager()
@@ -45,13 +46,15 @@ class Settings(Frame):
 
 		
 	def draw_settings(self):
-		settings = (("time", "time"), ("wordsfile", "words file"), ("linecount", "line count"), 
-						("maxcharsperline", "max chars per line"))
+		settings = (("time", "time"), ("wordsfile", "words file"))
 		row = 0
 		for s in settings:
 			Label(self.options_frame, text=s[1].title(), font=FONT).grid(row=row, column=0)
 			if s[0] == "wordsfile":
-				Button(self.options_frame, text="View/Edit", font=FONT, command=self.edit_file).grid(row=row, column=1)
+				temp_frame = Frame(self.options_frame)
+				temp_frame.grid(row=row, column=1)
+				Button(temp_frame, text="Edit", font=FONT, command=self.edit_file).grid(row=0, column=0, padx=10)
+				Button(temp_frame, text="Default", font=FONT, command=self.reset_file).grid(row=0, column=1, padx=10)
 				
 			else:
 				# draw a label and then an appropriate widget to modify the option
@@ -61,17 +64,28 @@ class Settings(Frame):
 				self.entries[s[0]] = e
 				e.insert(0, self.cfgmgr.get_setting("SETTINGS", s[0]))
 			row += 1
-		Button(self.options_frame, text="Save", font=FONT, command=self.save_clicked).grid(row=row, column=0, columnspan=2)
+		# Button(self.options_frame, text="Save", font=FONT, command=self.save_clicked).grid(row=row, column=0, columnspan=2,
+		# 			pady=10)
+
+	def reset_file(self):
+		with open("resources/default_words.txt", "r") as file:
+			default_words = file.read()
+		with open("resources/words.txt", "w") as file:
+			file.write(default_words)
 
 	def save_clicked(self):
 		self.save_settings()
+		
+
 
 	def save_settings(self):
 		for name, entry in self.entries.items():
 			self.cfgmgr.change_setting("SETTINGS", name.title(), entry.get())
 
 	def back_clicked(self):
+		self.save_settings()
 		self.controller.show_frame("TypeGame")
+
 
 	def edit_file(self):
 		self.editor = Toplevel()
@@ -91,7 +105,8 @@ class Settings(Frame):
 
 	def save_editor(self):
 		contents = self.editor_text.get("0.0", END)
-		print(contents)
 
 		with open("resources/words.txt", "w") as file:
 			file.write(contents[:len(contents)-1])
+
+		self.editor.destroy()
