@@ -1,4 +1,6 @@
 CURRENT:
+BUG: weird spacing and shit or missing words or something. What is causing
+this?? Maybe something to do with appended new line with text file editor?
 - add logs feature
 - save each run (all data??)
 - be able to view log
