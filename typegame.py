@@ -85,7 +85,7 @@ class TypeGame(Frame):
 
 		self.results_text.grid(row=1, column=0, columnspan=3)
 
-		self.text_display.config(height=self.LINE_COUNT, width=self.MAX_CHARS+10)
+		self.text_display.config(height=self.LINE_COUNT, width=self.MAX_CHARS+1)
 
 
 
