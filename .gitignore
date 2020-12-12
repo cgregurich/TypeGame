@@ -1,4 +1,5 @@
 ﻿__pycache__/
+*.db
 testing.py
 testing.ini
 build/
@@ -7,3 +8,4 @@ dist/
 config.ini
 resources/words.txt
 second.txt
+

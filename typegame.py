@@ -6,9 +6,25 @@ import PIL
 from PIL import Image, ImageTk
 from configmanager import ConfigManager
 
+from datetime import datetime
 
-# TODO:
-# - Settings (change time, lines, chars per line, change words file/text, font??)
+from result import Result
+from resultdao import ResultDAO
+
+resultdao = ResultDAO()
+
+
+
+# WHERE I LEFT OFF:
+# got it so when a trial ends, it saves the data to the db
+# need to add a stats page button (typical bar graph icon, matching the other icons)
+# this will display: session average (keep track of sessions from opening app)
+# as well as daily average (past 24 hours), weekly average (past 7 days), 
+# monthly average (past 30 days), and yearly average (pas 365 days)
+
+# Obviously also want to still make a typeracer type game, where instead of random
+# words with next to no capitalization and punctuation, it pulls phrases
+# from the internet (from good reads quotes?) Whole different stats page probably?
 
 FONT = ("Consolas", 16)
 STOPPED = "stopped"
@@ -98,10 +114,7 @@ class TypeGame(Frame):
 		self.set_cursor_end()
 		self.draw_words()
 		self.highlight_goal_word()
-		
-
-		
-
+	
 		self.entry.focus()
 
 		self.ctrl_down = False
@@ -135,15 +148,39 @@ class TypeGame(Frame):
 		self.settings_btn.config(image=self.img_settings)
 
 		
+	def create_results_data(self):
+		"""Creates and returns a dictionary representing the trial's data"""
+		data = {"seconds": self.TIME,
+			    "wpm": self.calc_wpm(),
+			    "accuracy": self.calc_accuracy(),
+			    "correct_words": self.correct_words,
+			    "wrong_words": self.attempted_words - self.correct_words,
+			    "correct_ks": self.correct_chars,
+			    "wrong_ks": self.attempted_chars - self.correct_chars,
+			    "time_completed": self.get_current_time(),
+			    "date_completed": self.get_current_date()}
+		return data
+
+	def get_current_time(self):
+		"""Returns current time as string in format HH:MM (24-hour clock)"""
+		today = datetime.now()
+		return today.strftime("%H:%M")
+
+	def get_current_date(self):
+		today = datetime.now()
+		return today.strftime("%m-%d-%y")
 
 
 	def set_results_text(self):
-
+		"""Sets the results text widget with the proper data
+		then returns the dictionary containing the data"""
 		# Set WPM, accuracy, correct words, wrong words, correct chars, wrong chars, total chars
-		wpm = self.calc_wpm()
-		accuracy = self.calc_accuracy()
-		wrong_words = self.attempted_words - self.correct_words
-		wrong_chars = self.attempted_chars - self.correct_chars
+		data = self.create_results_data()
+		wpm = data["wpm"]
+		accuracy = data["accuracy"]
+		wrong_words = data["wrong_words"]
+		wrong_chars = data["wrong_ks"]
+
 		self.results_text.config(state=NORMAL)
 		self.results_text.delete("0.0", END)
 
@@ -186,6 +223,8 @@ class TypeGame(Frame):
 
 
 		self.results_text.config(state=DISABLED)
+
+		return data
 		
 	def _get_col_from_results_text(self):
 		return int(self.results_text.index(INSERT).split(".")[1])
@@ -212,13 +251,14 @@ class TypeGame(Frame):
 		self.reset_timer_label()
 		self.reset_results_text()
 		self.reset_timer()
+		self.clear_typed()
+
 
 		
 
 	def reload_settings(self):
 		self.TIME = int(self.cfgmgr.get_setting("SETTINGS", "time"))
 	
-
 
 	def reset_timer(self):
 		if not self.timer_id:
@@ -249,7 +289,7 @@ class TypeGame(Frame):
 		self.results_text.insert(INSERT, "\nFinish typing to get results.")
 		self.results_text.config(stat=DISABLED)
 
-	def clear_typed(self, event):
+	def clear_typed(self, event=None):
 		self.entry.delete(0, END)
 
 
@@ -269,10 +309,24 @@ class TypeGame(Frame):
 				x = 1
 			self.timer_id = self.after(1000, self.timer_loop, seconds - x)
 		else:
-			self.is_running = False
-			self._redraw_clock_label(0, 0)
-			self.set_results_text()
-			self.pause_input()
+			self.trial_over()
+			
+
+	def trial_over(self):
+		self.is_running = False
+		self._redraw_clock_label(0, 0)
+		data = self.set_results_text()
+		self.pause_input()
+		self.save_result(data)
+
+	def save_result(self, data):
+		"""Receives a dictionary representing the trial's result data"""
+		result = Result(data)
+		resultdao.insert_result(result)
+
+
+
+
 
 	def pause_input(self):
 		self.entry.delete(0, END)
